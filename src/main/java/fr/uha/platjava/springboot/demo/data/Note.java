@@ -1,4 +1,4 @@
-package fr.uha.platjava.springboot.demo;
+package fr.uha.platjava.springboot.demo.data;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -31,8 +31,8 @@ public class Note {
 	}
 	
 	private @Id @GeneratedValue Long id;
-	private @ManyToOne User owner;
-	private @ManyToMany Set<User> shared_user;
+	private @ManyToOne AppUser owner;
+	private @ManyToMany Set<AppUser> shared_user;
 	private String title;
 	private String content;
 	private LocalDateTime creation_date;

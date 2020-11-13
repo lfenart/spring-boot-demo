@@ -1,4 +1,4 @@
-package fr.uha.platjava.springboot.demo;
+package fr.uha.platjava.springboot.demo.data;
 
 import java.util.Collection;
 
@@ -14,14 +14,15 @@ public class NoteRepositoryCustomImpl implements NoteRepositoryCustom {
 	private EntityManager em;
 	
 	@Override
-	public Collection<Note> findNoteVisibleBy(User user) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+	public Collection<Note> findNoteVisibleBy(AppUser user) {
+	/*	CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Note> query = cb.createQuery(Note.class);
 		Root<Note> root_note = query.from(Note.class);
 		
         query.select(root_note).where(cb.or(cb.equal(root_note.get("owner"), user), cb.in(root_note.get("shared_user"))));
 		
-        return em.createQuery(query).getResultList();
+        return em.createQuery(query).getResultList();*/
+		return null;
 	}
 
 }

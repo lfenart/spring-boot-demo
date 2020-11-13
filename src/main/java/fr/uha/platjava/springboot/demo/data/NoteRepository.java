@@ -1,4 +1,4 @@
-package fr.uha.platjava.springboot.demo;
+package fr.uha.platjava.springboot.demo.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
