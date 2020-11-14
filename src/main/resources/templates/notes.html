@@ -1,0 +1,58 @@
+<style>
+
+  @font-face {
+    font-family: 'PT Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url(http://themes.googleusercontent.com/static/fonts/ptsans/v6/LKf8nhXsWg5ybwEGXk8UBQ.woff) format('woff');
+  }
+
+  body {
+    font-family: "Open Sans",sans-serif, Arial;
+    font-size: 13px;
+    line-height: 1.42857;
+    color: #767676;
+    background: #edecec;
+  }
+
+  table {
+    border: medium solid #000000;
+    width: 100%;
+  }
+  td, th {
+    border: thin solid #6495ed;
+    width: 50%;
+    padding: 5px 5px 5px;
+  }
+
+
+  input{
+    float: right;
+    padding: 0px 5px 0px;
+    margin: 0px 5px;
+  }
+
+
+</style>
+
+
+
+
+<html>
+	<body>
+	<h1>Notes</h1>
+        <table>
+	<form action="/user/notes" th:object="${notes}" method="POST" enctype="utf8">
+	        <tr th:each="note: ${notes}">
+                    <td>
+                        <h2 th:text="${note.getTitle()}"/>
+                        <p th:text="${note.getContent()}"></p>
+                        <p>Note créée le: <p th:text="${note.getCreationDate()}"/></p></p>
+                        <p>Par: <p th:text="${note.getOwner().getUsername()}"/></p></p>
+                    </td>
+                </tr>
+	</form>
+        </table>
+
+	</body>
+</html>
