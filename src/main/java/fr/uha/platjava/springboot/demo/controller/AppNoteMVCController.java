@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,13 +21,19 @@ import com.sun.istack.logging.Logger;
 
 import fr.uha.platjava.springboot.demo.data.AppUser;
 import fr.uha.platjava.springboot.demo.data.AppUserDTO;
+import fr.uha.platjava.springboot.demo.data.Note;
+import fr.uha.platjava.springboot.demo.data.NoteDTO;
 import fr.uha.platjava.springboot.demo.service.AppUserService;
+import fr.uha.platjava.springboot.demo.service.NoteService;
 
 @Controller
 public class AppNoteMVCController {
 
 	@Autowired
 	private AppUserService appUserService;
+	
+	@Autowired
+	private NoteService noteService;
 	
 	@GetMapping("/user/register")
 	public String userRegisterPage(Model model) {
@@ -37,13 +45,35 @@ public class AppNoteMVCController {
 	@PostMapping("/user/register")
 	public ModelAndView registerUser(@ModelAttribute("user") @Valid AppUserDTO dto, HttpServletRequest request, Errors errors) {
 		try {
-			AppUser user = appUserService.registerAppUser(dto);
+			appUserService.registerAppUser(dto);
 		} catch(RuntimeException e) {
 			Logger.getLogger(AppNoteMVCController.class).log(Level.INFO, "User sign up failed");
 			ModelAndView mav = new ModelAndView("register", "user", dto);
-			mav.addObject("message", "Error: Username already in use");
+			mav.addObject("message", "Error: Username already in usev");
 			return mav;
 		}
 		return new ModelAndView("successRegister", "user", dto);
+	}
+	
+	@GetMapping("/notes")
+	public String getUserHome(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		model.addAttribute("username", authentication.getName());
+		return "notes";
+	}
+	
+	@GetMapping("/notes/add")
+	public String addNoteForm(Model model){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		AppUser user = appUserService.getByName(authentication.getName());
+		model.addAttribute("user", user);
+		model.addAttribute("note", new NoteDTO());
+		return "addNote";
+	}
+	
+	@PostMapping("/notes/add")
+	public String addNote(@ModelAttribute("note") @Valid NoteDTO dto, HttpServletRequest request, Errors errors) {
+		noteService.addNote(dto);
+		return "redirect:/notes";
 	}
 }

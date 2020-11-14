@@ -16,8 +16,11 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		//http.authorizeRequests().anyRequest().authenticated().and().formLogin().and().httpBasic();
-		http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+		http.csrf().disable()
+			.authorizeRequests()
+			.antMatchers("/user/register", "/api/**").permitAll()
+			.anyRequest().authenticated().and().formLogin().and().httpBasic();
+		//http.csrf().disable().authorizeRequests().anyRequest().permitAll();
 	}
 	
 	@Bean
@@ -31,8 +34,9 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Autowired
-	private CustomAppUserDetailsService userDetailsService;
-	 
+	private UserDetailsService userDetailsService;
+	
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) 
 	  throws Exception {

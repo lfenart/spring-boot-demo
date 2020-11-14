@@ -1,0 +1,19 @@
+<html>
+	<style> textarea { display:block; } </style>
+	<body>
+	<h1>New note</h1>
+	<form action="/notes/add" th:object="${note}" method="POST" enctype="utf8">
+	    <div>
+	        <label>Title</label>
+			<input th:field="*{title}"/>
+	    </div>
+	    <div>
+	        <label>Content</label>
+			<textarea th:field="*{content}"></textarea>
+	    </div>
+	    <button type="submit">Add</button>
+	</form>
+
+	<a th:href="@{/login.html}">login</a>
+	</body>
+</html>

@@ -22,7 +22,7 @@ public class Note {
 	}
 	
 	public String getContent() { return this.content; }
-	public void SetContent(String content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 	

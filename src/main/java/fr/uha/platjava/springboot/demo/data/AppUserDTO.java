@@ -10,15 +10,15 @@ public class AppUserDTO {
 
 	@NotNull
 	@NotEmpty
-	public String username;
+	private String username;
 	
 	@NotNull
 	@NotEmpty
-	public String password;
+	private String password;
 	
 	@NotNull
 	@NotEmpty
-	public String passwordMatch;
+	private String passwordMatch;
 	
 	public String getUsername() { return this.username; }
 	public void setUsername(String name) { this.username = name; }
