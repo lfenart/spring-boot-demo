@@ -20,6 +20,7 @@ public class AppUser {
 	}
 	
 	public String getPassword() { return this.hashed_password; }
+	public void setPassword(String pw) { this.hashed_password = pw; }
 	
 	private @Id @GeneratedValue Long id;
 	private String hashed_password;
