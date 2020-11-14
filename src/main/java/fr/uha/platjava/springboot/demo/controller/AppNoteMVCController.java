@@ -37,9 +37,7 @@ public class AppNoteMVCController {
 
 	@Autowired
 	private AppUserService appUserService;
-	@Autowired
-	private NoteRepository noteRepository;
-	
+
 	@Autowired
 	private NoteService noteService;
 	
@@ -63,13 +61,6 @@ public class AppNoteMVCController {
 		return new ModelAndView("successRegister", "user", dto);
 	}
 	
-	@GetMapping("/notes")
-	public String getUserHome(Model model) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		model.addAttribute("username", authentication.getName());
-		return "notes";
-	}
-	
 	@GetMapping("/notes/add")
 	public String addNoteForm(Model model){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,31 +76,11 @@ public class AppNoteMVCController {
 		return "redirect:/notes";
 	}
 
-
-	@GetMapping("/user/notes")
+	@GetMapping("/notes")
 	public String userNotesPage(Model model) {
-		Note note1 = new Note();
-		Note note2 = new Note();
-		Note note3 = new Note();
-		AppUser user1= new AppUser();
-		AppUser user2= new AppUser();
-		AppUser user3= new AppUser();
-		user1.setUsername("Roger");
-		user2.setUsername("Bertrand");
-		user3.setUsername("Gerard");
-		note1.setTitle("note1");
-		note2.setTitle("note2");
-		note3.setTitle("note3");
-		note1.setOwner(user1);
-		note2.setOwner(user2);
-		note3.setOwner(user1);
-		note1.setContent("Ceci est la note 1");
-		note2.setContent("Ceci est la note 2");		
-		note3.setContent("Ceci est la note 3");
-		List<Note> notes = new ArrayList<Note>();
-                notes.add(note1);
-                notes.add(note2);
-                notes.add(note3);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = appUserService.getByName(authentication.getName());
+        List<Note> notes = this.noteService.getNoteVisibleBy(user);
 		model.addAttribute("notes", notes);
 		return "notes";
 	}

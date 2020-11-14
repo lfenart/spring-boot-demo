@@ -31,9 +31,14 @@ public class Note {
 		this.content = content;
 	}
 	
-        public AppUser getOwner() { return this.owner; }
+    public AppUser getOwner() { return this.owner; }
 	public void setOwner(AppUser owner) {
 		this.owner = owner;
+	}
+	
+    public Set<AppUser> getSharedUser() { return this.sharedUser; }
+	public void addSharedUser(AppUser user) {
+		this.sharedUser.add(user);
 	}
 
 	public LocalDateTime getCreationDate() {
@@ -42,7 +47,7 @@ public class Note {
 	
 	private @Id @GeneratedValue Long id;
 	private @ManyToOne AppUser owner;
-	private @ManyToMany Set<AppUser> shared_user;
+	private @ManyToMany Set<AppUser> sharedUser;
 	private String title;
 	private String content;
 	private LocalDateTime creation_date;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.uha.platjava.springboot.demo.data.AppUser;
 import fr.uha.platjava.springboot.demo.data.Note;
 import fr.uha.platjava.springboot.demo.data.NoteDTO;
 import fr.uha.platjava.springboot.demo.data.NoteRepository;
@@ -20,6 +21,10 @@ public class NoteService {
 		note.setContent(dto.getContent());
 		
 		return this.repository.save(note);
+	}
+	
+	public List<Note> getNoteVisibleBy(AppUser user) {
+		return this.repository.findNoteVisibleBy(user);
 	}
 	
 	public List<Note> getAllNotes() {
