@@ -22,15 +22,23 @@ import com.sun.istack.logging.Logger;
 import fr.uha.platjava.springboot.demo.data.AppUser;
 import fr.uha.platjava.springboot.demo.data.AppUserDTO;
 import fr.uha.platjava.springboot.demo.data.Note;
+
 import fr.uha.platjava.springboot.demo.data.NoteDTO;
 import fr.uha.platjava.springboot.demo.service.AppUserService;
 import fr.uha.platjava.springboot.demo.service.NoteService;
+
+import fr.uha.platjava.springboot.demo.data.NoteRepository;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Controller
 public class AppNoteMVCController {
 
 	@Autowired
 	private AppUserService appUserService;
+	@Autowired
+	private NoteRepository noteRepository;
 	
 	@Autowired
 	private NoteService noteService;
@@ -76,4 +84,34 @@ public class AppNoteMVCController {
 		noteService.addNote(dto);
 		return "redirect:/notes";
 	}
+
+
+	@GetMapping("/user/notes")
+	public String userNotesPage(Model model) {
+		Note note1 = new Note();
+		Note note2 = new Note();
+		Note note3 = new Note();
+		AppUser user1= new AppUser();
+		AppUser user2= new AppUser();
+		AppUser user3= new AppUser();
+		user1.setUsername("Roger");
+		user2.setUsername("Bertrand");
+		user3.setUsername("Gerard");
+		note1.setTitle("note1");
+		note2.setTitle("note2");
+		note3.setTitle("note3");
+		note1.setOwner(user1);
+		note2.setOwner(user2);
+		note3.setOwner(user1);
+		note1.setContent("Ceci est la note 1");
+		note2.setContent("Ceci est la note 2");		
+		note3.setContent("Ceci est la note 3");
+		List<Note> notes = new ArrayList<Note>();
+                notes.add(note1);
+                notes.add(note2);
+                notes.add(note3);
+		model.addAttribute("notes", notes);
+		return "notes";
+	}
+
 }

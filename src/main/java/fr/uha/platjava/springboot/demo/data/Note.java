@@ -15,6 +15,11 @@ public class Note {
 	public Note() {
 		this.creation_date = LocalDateTime.now();
 	}
+
+	public Note(AppUser owner) {
+		this.creation_date = LocalDateTime.now();
+		this.owner = owner;
+	}
 	
 	public String getTitle() { return this.title; }
 	public void setTitle(String title) {
@@ -26,6 +31,11 @@ public class Note {
 		this.content = content;
 	}
 	
+        public AppUser getOwner() { return this.owner; }
+	public void setOwner(AppUser owner) {
+		this.owner = owner;
+	}
+
 	public LocalDateTime getCreationDate() {
 		return this.creation_date;
 	}
@@ -36,4 +46,6 @@ public class Note {
 	private String title;
 	private String content;
 	private LocalDateTime creation_date;
+
+
 }
