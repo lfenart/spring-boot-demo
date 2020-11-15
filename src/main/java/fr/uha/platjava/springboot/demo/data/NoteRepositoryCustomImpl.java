@@ -26,7 +26,7 @@ public class NoteRepositoryCustomImpl implements NoteRepositoryCustom {
         query.select(root_note);
         List<Note> notes = em.createQuery(query).getResultList();
         for(int i=0; i<notes.size(); i++) {
-        	if(!notes.get(i).getSharedUser().contains(user)) {
+        	if(!(notes.get(i).getOwner().equals(user) || notes.get(i).getSharedUser().contains(user))) {
         		notes.remove(i);
         	}
         }

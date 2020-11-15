@@ -28,5 +28,4 @@ public class CustomAppUserDetailsService implements UserDetailsService {
 	
 	@Autowired
 	private AppUserRepository aur;
-
 }

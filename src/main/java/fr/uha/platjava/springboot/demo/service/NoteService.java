@@ -15,8 +15,8 @@ public class NoteService {
 	@Autowired
 	private NoteRepository repository;
 	
-	public Note addNote(NoteDTO dto) {
-		Note note = new Note();
+	public Note addNote(AppUser owner, NoteDTO dto) {
+		Note note = new Note(owner);
 		note.setTitle(dto.getTitle());
 		note.setContent(dto.getContent());
 		

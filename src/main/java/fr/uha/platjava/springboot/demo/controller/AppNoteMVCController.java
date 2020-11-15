@@ -72,7 +72,9 @@ public class AppNoteMVCController {
 	
 	@PostMapping("/notes/add")
 	public String addNote(@ModelAttribute("note") @Valid NoteDTO dto, HttpServletRequest request, Errors errors) {
-		noteService.addNote(dto);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = appUserService.getByName(authentication.getName());
+		noteService.addNote(user, dto);
 		return "redirect:/notes";
 	}
 

@@ -29,6 +29,7 @@ public class AppNoteAPIController {
 	
 	@GetMapping("/api/notes")
 	public List<Note> getNotes() {
-		return this.note_service.getAllNotes();
+		AppUser user = user_service.getByName("Fabien");
+		return this.note_service.getNoteVisibleBy(user);
 	}
 }
