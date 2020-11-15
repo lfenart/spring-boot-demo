@@ -1,5 +1,6 @@
 package fr.uha.platjava.springboot.demo.health;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -17,15 +18,19 @@ public abstract class HttpHealthIndicator implements HealthIndicator {
 	@Override
 	public Health health() {
 		try {
-			HttpURLConnection connection = (HttpURLConnection) new URL(this.URL).openConnection();
-			int status = connection.getResponseCode();
+			int status = this.httpStatus();
 			if (status >= 400 && status < 600) {
 				return Health.down().withDetail("httpStatus", status).build();
 			}
 			return Health.up().withDetail("httpStatus", status).build();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.out.println("Failed to connect to: " + URL);
 			return Health.down().withDetail("error", e.getMessage()).build();
 		}
+	}
+
+	private int httpStatus() throws IOException {
+		HttpURLConnection connection = (HttpURLConnection) new URL(this.URL).openConnection();
+		return connection.getResponseCode();
 	}
 }
