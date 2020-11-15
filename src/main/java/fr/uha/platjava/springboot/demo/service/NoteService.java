@@ -31,5 +31,8 @@ public class NoteService {
 		return this.repository.findAll();
 	}
 	
-	//public Note addSharedUser()
+	public Note addSharedUser(AppUser user, Note note) {
+		note.addSharedUser(user);
+		return this.repository.save(note);
+	}
 }
