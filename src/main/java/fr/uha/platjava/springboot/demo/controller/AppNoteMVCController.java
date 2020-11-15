@@ -83,7 +83,9 @@ public class AppNoteMVCController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = appUserService.getByName(authentication.getName());
         List<Note> notes = this.noteService.getNoteVisibleBy(user);
+        List<AppUser> users = this.appUserService.getAllUser();
 		model.addAttribute("notes", notes);
+                model.addAttribute("users", users);
 		return "notes";
 	}
 

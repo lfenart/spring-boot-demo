@@ -26,10 +26,9 @@
   }
 
 
-  input{
-    float: right;
-    padding: 0px 5px 0px;
-    margin: 0px 5px;
+  
+  .selector{
+      float:right;
   }
 
 
@@ -47,8 +46,16 @@
                  <td>
                         <h2 th:text="${note.getTitle()}"/>
                         <p th:text="${note.getContent()}"></p>
-                        <p>Note créée le: <p th:text="${note.getCreationDate()}"/></p></p>
-                        <p>Par: <p th:text="${note.getOwner().getUsername()}"/></p></p>
+                        <p>Date of creation: <p th:text="${note.getCreationDate()}"/></p>
+                        <p>Created by: <p th:text="${note.getOwner().getUsername()}"/>
+                            Add users: 
+                            <select name="users" id="users-select">
+                                <a th:each="user: ${users}">
+                                <option value="${user}"><p th:text="${user.getUsername()}"/></option> 
+                                </a>
+                            </select>
+                            <input type="button"  value="Add user"/>
+                        </p>
                  </td>
              </tr>
         </table>
