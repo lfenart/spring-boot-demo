@@ -58,7 +58,7 @@ public class AppNoteMVCController {
 		} catch(RuntimeException e) {
 			Logger.getLogger(AppNoteMVCController.class).log(Level.INFO, "User sign up failed");
 			ModelAndView mav = new ModelAndView("register", "user", dto);
-			mav.addObject("message", "Error: Username already in usev");
+			mav.addObject("message", "Error: Username already in use");
 			return mav;
 		}
 		return new ModelAndView("successRegister", "user", dto);
@@ -78,11 +78,6 @@ public class AppNoteMVCController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser user = appUserService.getByName(authentication.getName());
 		noteService.addNote(user, dto);
-		return "redirect:/notes";
-	}
-	
-	@GetMapping("note/share")
-	public String redirectShareNote() {
 		return "redirect:/notes";
 	}
 	
