@@ -1,7 +1,8 @@
 package fr.uha.platjava.springboot.demo.data;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface NoteRepositoryCustom {
-	public Collection<Note> findNoteVisibleBy(AppUser user);
+	public List<Note> findNoteVisibleBy(AppUser user);
 }

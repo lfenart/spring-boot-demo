@@ -8,6 +8,10 @@ import javax.persistence.Id;
 @Entity
 public class AppUser {
 	
+	private @Id @GeneratedValue Long id;
+	private String hashed_password;
+	private @Column(unique=true, nullable=false) String username;
+	
 	public AppUser() {
 		
 	}
@@ -22,8 +26,10 @@ public class AppUser {
 	public String getPassword() { return this.hashed_password; }
 	public void setPassword(String pw) { this.hashed_password = pw; }
 	
-	private @Id @GeneratedValue Long id;
-	private String hashed_password;
-	private @Column(unique=true, nullable=false) String username;
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("User {\ntid:\t").append(this.getId()).append("\ntusername:\t").append(this.getUsername());
+		return sb.toString();
+	}
 	
 }

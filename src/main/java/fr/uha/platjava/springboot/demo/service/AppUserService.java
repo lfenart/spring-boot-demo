@@ -1,5 +1,8 @@
 package fr.uha.platjava.springboot.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,5 +30,21 @@ public class AppUserService {
 		user.setPassword(encoder.encode(dto.getPassword()));
 		
 		return repository.save(user);
+	}
+	
+	public AppUser getByName(String username) {
+		return this.repository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+	}
+	
+	public List<AppUser> getAllUser() {
+		return this.repository.findAll();
+	}
+	
+	public List<String> getAllUsername() {
+		return this.repository.getAllUsername();
+	}
+	
+	public AppUser findById(Long id) {
+		return this.repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 	}
 }

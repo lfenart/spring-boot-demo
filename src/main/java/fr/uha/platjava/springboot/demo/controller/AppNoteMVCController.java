@@ -7,11 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,13 +22,27 @@ import com.sun.istack.logging.Logger;
 
 import fr.uha.platjava.springboot.demo.data.AppUser;
 import fr.uha.platjava.springboot.demo.data.AppUserDTO;
+import fr.uha.platjava.springboot.demo.data.Note;
+
+import fr.uha.platjava.springboot.demo.data.NoteDTO;
 import fr.uha.platjava.springboot.demo.service.AppUserService;
+import fr.uha.platjava.springboot.demo.service.NoteService;
+
+import fr.uha.platjava.springboot.demo.data.NoteRepository;
+import fr.uha.platjava.springboot.demo.data.ShareDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Controller
 public class AppNoteMVCController {
 
 	@Autowired
 	private AppUserService appUserService;
+
+	@Autowired
+	private NoteService noteService;
 	
 	@GetMapping("/user/register")
 	public String userRegisterPage(Model model) {
@@ -37,7 +54,7 @@ public class AppNoteMVCController {
 	@PostMapping("/user/register")
 	public ModelAndView registerUser(@ModelAttribute("user") @Valid AppUserDTO dto, HttpServletRequest request, Errors errors) {
 		try {
-			AppUser user = appUserService.registerAppUser(dto);
+			appUserService.registerAppUser(dto);
 		} catch(RuntimeException e) {
 			Logger.getLogger(AppNoteMVCController.class).log(Level.INFO, "User sign up failed");
 			ModelAndView mav = new ModelAndView("register", "user", dto);
@@ -46,4 +63,53 @@ public class AppNoteMVCController {
 		}
 		return new ModelAndView("successRegister", "user", dto);
 	}
+	
+	@GetMapping("/notes/add")
+	public String addNoteForm(Model model){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		AppUser user = appUserService.getByName(authentication.getName());
+		model.addAttribute("user", user);
+		model.addAttribute("note", new NoteDTO());
+		return "addNote";
+	}
+	
+	@PostMapping("/notes/add")
+	public String addNote(@ModelAttribute("note") @Valid NoteDTO dto, HttpServletRequest request, Errors errors) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = appUserService.getByName(authentication.getName());
+		noteService.addNote(user, dto);
+		return "redirect:/notes";
+	}
+	
+	@PostMapping("/note/share")
+	public String shareNote(@ModelAttribute("sharing") ShareDTO sharing, HttpServletRequest request, Errors errrors) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = appUserService.getByName(authentication.getName());
+		try {
+			Note note = noteService.getOwnedNoteById(user, sharing.getNoteId());
+			AppUser sharedUser = appUserService.findById(sharing.getSharedUserId());
+			noteService.addSharedUser(sharedUser, note);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			//Shoud be redirecting to an error page
+		}
+		return "redirect:/notes";
+	}
+
+	@GetMapping("/notes")
+	public String userNotesPage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = appUserService.getByName(authentication.getName());
+        List<Note> notes = this.noteService.getNoteVisibleBy(user);
+        List<AppUser> users = this.appUserService.getAllUser();
+        users.remove(user);
+        
+        ShareDTO share = new ShareDTO();
+		model.addAttribute("notes", notes);
+        model.addAttribute("users", users);
+        model.addAttribute("user", user);
+        model.addAttribute("sharing", share);
+		return "notes";
+	}
+
 }
