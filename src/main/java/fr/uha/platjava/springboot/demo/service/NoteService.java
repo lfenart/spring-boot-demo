@@ -30,4 +30,6 @@ public class NoteService {
 	public List<Note> getAllNotes() {
 		return this.repository.findAll();
 	}
+	
+	//public Note addSharedUser()
 }

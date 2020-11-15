@@ -44,12 +44,12 @@
 	<a th:href="@{/notes/add}">Add</a>
         <table>
 	        <tr th:each="note: ${notes}">
-                    <td>
+                 <td>
                         <h2 th:text="${note.getTitle()}"/>
                         <p th:text="${note.getContent()}"></p>
                         <p>Note créée le: <p th:text="${note.getCreationDate()}"/></p></p>
                         <p>Par: <p th:text="${note.getOwner().getUsername()}"/></p></p>
-                    </td>
+                 </td>
              </tr>
         </table>
 
