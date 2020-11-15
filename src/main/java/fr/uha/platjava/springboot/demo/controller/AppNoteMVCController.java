@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,6 +29,8 @@ import fr.uha.platjava.springboot.demo.service.AppUserService;
 import fr.uha.platjava.springboot.demo.service.NoteService;
 
 import fr.uha.platjava.springboot.demo.data.NoteRepository;
+import fr.uha.platjava.springboot.demo.data.ShareDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +80,26 @@ public class AppNoteMVCController {
 		noteService.addNote(user, dto);
 		return "redirect:/notes";
 	}
+	
+	@GetMapping("note/share")
+	public String redirectShareNote() {
+		return "redirect:/notes";
+	}
+	
+	@PostMapping("/note/share")
+	public String shareNote(@ModelAttribute("sharing") ShareDTO sharing, HttpServletRequest request, Errors errrors) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = appUserService.getByName(authentication.getName());
+		try {
+			Note note = noteService.getOwnedNoteById(user, sharing.getNoteId());
+			AppUser sharedUser = appUserService.findById(sharing.getSharedUserId());
+			noteService.addSharedUser(sharedUser, note);
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			//Shoud be redirecting to an error page
+		}
+		return "redirect:/notes";
+	}
 
 	@GetMapping("/notes")
 	public String userNotesPage(Model model) {
@@ -84,8 +107,10 @@ public class AppNoteMVCController {
         AppUser user = appUserService.getByName(authentication.getName());
         List<Note> notes = this.noteService.getNoteVisibleBy(user);
         List<AppUser> users = this.appUserService.getAllUser();
+        ShareDTO share = new ShareDTO();
 		model.addAttribute("notes", notes);
-                model.addAttribute("users", users);
+        model.addAttribute("users", users);
+        model.addAttribute("sharing", share);
 		return "notes";
 	}
 

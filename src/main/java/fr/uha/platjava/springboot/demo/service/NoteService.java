@@ -1,6 +1,7 @@
 package fr.uha.platjava.springboot.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,13 @@ public class NoteService {
 	public Note addSharedUser(AppUser user, Note note) {
 		note.addSharedUser(user);
 		return this.repository.save(note);
+	}
+	
+	public Note getOwnedNoteById(AppUser user, Long id) {
+		Note note = this.repository.findById(id).orElseThrow(() -> new RuntimeException("Id does not correspond to a Note"));
+		if(note.getOwner().equals(user)) {
+			return note;
+		}
+		throw new RuntimeException("Id does belong to user");
 	}
 }

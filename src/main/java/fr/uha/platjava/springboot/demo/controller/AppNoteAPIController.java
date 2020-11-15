@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.uha.platjava.springboot.demo.data.AppUser;
@@ -32,4 +33,6 @@ public class AppNoteAPIController {
 		AppUser user = user_service.getByName("Fabien");
 		return this.note_service.getNoteVisibleBy(user);
 	}
+	
+
 }

@@ -21,6 +21,8 @@ public class Note {
 		this.owner = owner;
 	}
 	
+	public Long getId() { return this.id; }
+	
 	public String getTitle() { return this.title; }
 	public void setTitle(String title) {
 		this.title = title;

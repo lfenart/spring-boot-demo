@@ -1,6 +1,7 @@
 package fr.uha.platjava.springboot.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,5 +42,9 @@ public class AppUserService {
 	
 	public List<String> getAllUsername() {
 		return this.repository.getAllUsername();
+	}
+	
+	public AppUser findById(Long id) {
+		return this.repository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 	}
 }
