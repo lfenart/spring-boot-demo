@@ -38,4 +38,8 @@ public class AppUserService {
 	public List<AppUser> getAllUser() {
 		return this.repository.findAll();
 	}
+	
+	public List<String> getAllUsername() {
+		return this.repository.getAllUsername();
+	}
 }
