@@ -107,9 +107,12 @@ public class AppNoteMVCController {
         AppUser user = appUserService.getByName(authentication.getName());
         List<Note> notes = this.noteService.getNoteVisibleBy(user);
         List<AppUser> users = this.appUserService.getAllUser();
+        users.remove(user);
+        
         ShareDTO share = new ShareDTO();
 		model.addAttribute("notes", notes);
         model.addAttribute("users", users);
+        model.addAttribute("user", user);
         model.addAttribute("sharing", share);
 		return "notes";
 	}
